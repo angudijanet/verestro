@@ -54,3 +54,18 @@ Notes:
 - Do NOT commit real private keys to the repository. Use the example file and keep secrets out of source control.
 - The config supports either `cert`/`key` (inline PEM content) or `certPath`/`keyPath` (paths to PEM files).
 
+## Sending JSON requests to Verestro
+
+Verestro expects JSON payloads. Use `sendJsonToVerestro` to POST JSON with the configured client certificate/key:
+
+```js
+const { sendJsonToVerestro } = require('./src');
+
+const payload = { operation: 'ping' };
+sendJsonToVerestro('https://verestro.example.com/api', payload)
+	.then(res => console.log('status', res.statusCode, 'body', res.body))
+	.catch(err => console.error(err));
+```
+
+You can pass additional options (e.g., `rejectUnauthorized: false` for testing) as the third argument.
+

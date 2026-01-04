@@ -60,7 +60,7 @@ function connectToVerestro(urlStr, options = {}) {
     hostname: url.hostname,
     port: url.port || 443,
     path: url.pathname + url.search,
-    method: 'GET',
+    method: options.method || 'GET',
     cert: provided.cert,
     key: provided.key,
     rejectUnauthorized: options.rejectUnauthorized !== undefined ? options.rejectUnauthorized : true,
@@ -73,8 +73,23 @@ function connectToVerestro(urlStr, options = {}) {
       res.on('end', () => resolve({ statusCode: res.statusCode, headers: res.headers, body }));
     });
     req.on('error', reject);
+    if (options.body) req.write(options.body);
     req.end();
   });
+}
+
+/**
+ * Send a JSON request (POST by default) to Verestro using mTLS.
+ * `jsonObj` will be JSON.stringify'ed. Options forwarded to `connectToVerestro`.
+ */
+function sendJsonToVerestro(urlStr, jsonObj, options = {}) {
+  const body = JSON.stringify(jsonObj);
+  const headers = Object.assign({}, options.headers || {}, {
+    'Content-Type': 'application/json',
+    'Content-Length': Buffer.byteLength(body),
+  });
+
+  return connectToVerestro(urlStr, Object.assign({}, options, { method: options.method || 'POST', body, headers }));
 }
 
 module.exports = { greet, connectToVerestro, _loadCertKeyFromEnvOrFiles };
