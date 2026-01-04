@@ -9,6 +9,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      # Example: configure these secrets in the GitHub repository settings
+      CLIENT_CERT: ${{ secrets.CLIENT_CERT }}
+      CLIENT_KEY: ${{ secrets.CLIENT_KEY }}
 
     steps:
     - uses: actions/checkout@v4
