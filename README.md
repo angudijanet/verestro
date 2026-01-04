@@ -1,6 +1,8 @@
 # verestro
 
-A new Node.js project scaffolded by assistant.
+Test app fro connectign to Verestro
+
+Author: Janet Angudi
 
 ## Quickstart
 
