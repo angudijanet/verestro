@@ -32,3 +32,25 @@ node -e "require('./src').connectToVerestro(process.env.VERESTRO_URL).then(r=>co
 
 Example (CI with GitHub Secrets): set `CLIENT_CERT` and `CLIENT_KEY` secrets (contents of PEM files), then configure the workflow to export them as env vars for the job.
 
+## Config file
+
+You can also provide certificate and key via a JSON config file. By default the app looks for `verestro.config.json` in the project root, or set `VERESTRO_CONFIG_PATH` to point to a custom file.
+
+Example file (see `verestro.config.example.json`):
+
+```json
+{
+	"verestro": {
+		"url": "https://verestro.example.com/api",
+		"client": {
+			"certPath": "/path/to/client.crt",
+			"keyPath": "/path/to/client.key"
+		}
+	}
+}
+```
+
+Notes:
+- Do NOT commit real private keys to the repository. Use the example file and keep secrets out of source control.
+- The config supports either `cert`/`key` (inline PEM content) or `certPath`/`keyPath` (paths to PEM files).
+

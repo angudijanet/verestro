@@ -1,0 +1,14 @@
+{
+  "verestro": {
+    "url": "https://verestro.example.com/api",
+    "client": {
+      "# Option A - file paths (recommended):": "",
+      "certPath": "/path/to/client.crt",
+      "keyPath": "/path/to/client.key",
+
+      "# Option B - inline PEM content (use secrets and avoid committing real keys):": "",
+      "cert": "-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----",
+      "key": "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----"
+    }
+  }
+}

@@ -11,6 +11,7 @@ function _loadCertKeyFromEnvOrFiles() {
   const keyPath = process.env.CLIENT_KEY_PATH;
   const certEnv = process.env.CLIENT_CERT;
   const keyEnv = process.env.CLIENT_KEY;
+  const configPath = process.env.VERESTRO_CONFIG_PATH || 'verestro.config.json';
 
   let cert; let key;
   if (certEnv && keyEnv) {
@@ -19,6 +20,22 @@ function _loadCertKeyFromEnvOrFiles() {
   } else if (certPath && keyPath) {
     cert = fs.readFileSync(certPath);
     key = fs.readFileSync(keyPath);
+  } else if (fs.existsSync(configPath)) {
+    try {
+      const cfg = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+      const v = cfg.verestro || cfg;
+      if (v.client) {
+        if (v.client.cert && v.client.key) {
+          cert = v.client.cert;
+          key = v.client.key;
+        } else if (v.client.certPath && v.client.keyPath) {
+          cert = fs.readFileSync(v.client.certPath);
+          key = fs.readFileSync(v.client.keyPath);
+        }
+      }
+    } catch (err) {
+      // ignore parse errors and continue
+    }
   } else {
     return null;
   }
